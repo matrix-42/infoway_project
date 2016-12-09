@@ -1,7 +1,6 @@
 #1. MainActivity
-![alt tag](https://github.com/matrix-42/infoway_project/blob/master/SignInDemo/Screenshots/Screenshot_1481274762.png)
+![alt tag](https://github.com/matrix-42/infoway_project/blob/master/SignInDemo/Screenshots/Screenshot_1481274762.jpg)
 #2. SignUpActivity
-![alt tag](https://github.com/matrix-42/infoway_project/blob/master/SignInDemo/Screenshots/Screenshot_1481274786.png)
+![alt tag](https://github.com/matrix-42/infoway_project/blob/master/SignInDemo/Screenshots/Screenshot_1481274786.jpg)
 #3. SuccessActivity
-![alt tag](https://github.com/matrix-42/infoway_project/blob/master/SignInDemo/Screenshots/Screenshot_1481274795.png)
-
+![alt tag](https://github.com/matrix-42/infoway_project/blob/master/SignInDemo/Screenshots/Screenshot_1481274795.jpg)
