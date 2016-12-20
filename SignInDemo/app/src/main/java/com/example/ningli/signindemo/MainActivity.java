@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SuccessActivity.class);
-                database = db.getReadableDatabase();
+                //database = db.getReadableDatabase();
 
                 EditText txtname = (EditText)findViewById(R.id.UserName);
                 String name_input      =  txtname.getText().toString();
@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
                 while(cursor.moveToNext()){
                     String password = cursor.getString(cursor.getColumnIndex("Password"));
+                    String name = cursor.getString(cursor.getColumnIndex("UserName"));
                 if (password.equals(password_input))
+                    intent.putExtra("UserName", name);
                     startActivity(intent);
                 }
 

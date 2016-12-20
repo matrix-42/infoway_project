@@ -14,7 +14,10 @@ import android.widget.Toast;
 
 import com.example.ningli.signindemo.database.DBHelper;
 
+import static com.example.ningli.signindemo.database.DBHelper.TABLE_NAME;
+
 public class SignUpActivity extends AppCompatActivity{
+    SQLiteDatabase database;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +34,9 @@ public class SignUpActivity extends AppCompatActivity{
                 EditText txtpassword = (EditText)findViewById(R.id.InputPassword);
                 String password      =  txtpassword.getText().toString();
 
-                SQLiteDatabase database = db.getWritableDatabase();
+                database = db.getWritableDatabase();
 
-                Cursor cursor = database.query(DBHelper.TABLE_NAME, new String[]{"id","UserName","Password"}, "UserName = ?", new String[]{name}, null, null,null);
+                Cursor cursor = database.query(TABLE_NAME, new String[]{"id","UserName","Password"}, "UserName = ?", new String[]{name}, null, null,null);
 
                 if (cursor.moveToNext()){
                     Toast.makeText(SignUpActivity.this, "Username used!", Toast.LENGTH_LONG).show();
@@ -41,19 +44,22 @@ public class SignUpActivity extends AppCompatActivity{
                 else if (name.isEmpty() || password.isEmpty())
                     Toast.makeText(SignUpActivity.this, "Invalid Username or Password!", Toast.LENGTH_LONG).show();
                 else {
-                    database.beginTransaction();
                     ContentValues values = new ContentValues();
                     values.put("UserName", name);
                     values.put("Password", password);
 
-                    database.insert(DBHelper.TABLE_NAME, null, values);
-                    database.setTransactionSuccessful();
-                    database.endTransaction();
-
+                    database.insert(TABLE_NAME, null, values);
+                    createTable(name);
                     startActivity(intent);
                 }
             }
         });
 
+    }
+    protected void createTable(String name) {
+        String sql_creat =  "create table if not exists " + name +
+                " (Id integer primary key AUTOINCREMENT, item text, num integer, state integer)";
+        database.execSQL(sql_creat);
+        Toast.makeText(this, "Creating Table ... ", Toast.LENGTH_LONG).show();
     }
 }
