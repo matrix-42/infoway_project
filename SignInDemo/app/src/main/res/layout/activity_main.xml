@@ -43,4 +43,19 @@
         android:layout_marginRight="64dp"
         android:id="@+id/SignUp" />
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/SignInGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SignIn"
+        android:layout_marginTop="64dp"/>
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/SignInFacebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SignInGoogle"
+        android:layout_marginTop="16dp"/>
+
+
 </RelativeLayout>

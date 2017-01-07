@@ -36,7 +36,8 @@ public class SignUpActivity extends AppCompatActivity{
 
                 database = db.getWritableDatabase();
 
-                Cursor cursor = database.query(TABLE_NAME, new String[]{"id","UserName","Password"}, "UserName = ?", new String[]{name}, null, null,null);
+                Cursor cursor = database.query(TABLE_NAME, new String[]{"Id","UserName","Password","Type"},
+                        "UserName = ? and Type = ?", new String[]{name, "Local"}, null, null,null);
 
                 if (cursor.moveToNext()){
                     Toast.makeText(SignUpActivity.this, "Username used!", Toast.LENGTH_LONG).show();
@@ -47,17 +48,18 @@ public class SignUpActivity extends AppCompatActivity{
                     ContentValues values = new ContentValues();
                     values.put("UserName", name);
                     values.put("Password", password);
+                    values.put("Type", "Local");
 
-                    database.insert(TABLE_NAME, null, values);
-                    createTable(name);
+                    String id = String.valueOf(database.insert(TABLE_NAME, null, values));
+                    createTable("_" + id);
                     startActivity(intent);
                 }
             }
         });
 
     }
-    protected void createTable(String name) {
-        String sql_creat =  "create table if not exists " + name +
+    protected void createTable(String id) {
+        String sql_creat =  "create table if not exists " + id +
                 " (Id integer primary key AUTOINCREMENT, item text, num integer, state integer)";
         database.execSQL(sql_creat);
         Toast.makeText(this, "Creating Table ... ", Toast.LENGTH_LONG).show();

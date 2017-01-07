@@ -19,14 +19,14 @@ public class AddFragment extends Fragment {
 
     public static final String KEY_PAGE = "page";
 
-    private static String USER_NAME;
+    private static String USER_ID;
 
     @NonNull
     public static AddFragment newInstance(int page, String NAME) {
         Bundle args = new Bundle();
         args.putInt(KEY_PAGE, page);
-        args.putString("USER_NAME", NAME);
-        USER_NAME = NAME;
+        args.putString("USER_ID", NAME);
+        USER_ID = NAME;
 
         AddFragment addFragment = new AddFragment();
         addFragment.setArguments(args);
@@ -68,7 +68,7 @@ public class AddFragment extends Fragment {
                     values.put("num", Integer.valueOf(num));
                     values.put("state", 0);
 
-                    long id = database.insert(USER_NAME, null, values);
+                    long id = database.insert(USER_ID, null, values);
                     itemName.setText("");
                     itemNumber.setText("");
                     Toast.makeText(getActivity(), "Adding item to List ... " + " ( " + name + ", " + num + " ) " + "on " + id, Toast.LENGTH_LONG).show();

@@ -22,14 +22,14 @@ public class ShowFragment extends Fragment {
     public static final String KEY_PAGE = "page";
 
 
-    private static String USER_NAME;
+    private static String USER_ID;
 
     @NonNull
     public static ShowFragment newInstance(int page, String NAME) {
         Bundle args = new Bundle();
         args.putInt(KEY_PAGE, page);
-        args.putString("USER_NAME", NAME);
-        USER_NAME = NAME;
+        args.putString("USER_ID", NAME);
+        USER_ID = NAME;
 
         ShowFragment showFragment = new ShowFragment();
         showFragment.setArguments(args);
@@ -55,7 +55,7 @@ public class ShowFragment extends Fragment {
         final SQLiteOpenHelper db = DBHelper.getInstance(getActivity());
         final SQLiteDatabase database = db.getWritableDatabase();
 
-        Cursor cursor = database.query(USER_NAME, new String[]{"Id","item","num", "state"},"state = ?", new String[]{"0"}, null, null,null);
+        Cursor cursor = database.query(USER_ID, new String[]{"Id","item","num", "state"},"state = ?", new String[]{"0"}, null, null,null);
 
         while(cursor.moveToNext()){
             final String itemid = cursor.getString(cursor.getColumnIndex("Id"));
@@ -72,7 +72,7 @@ public class ShowFragment extends Fragment {
                 public void onClick(View view) {
                     ContentValues values = new ContentValues();
                     values.put("state","1");
-                    database.update(USER_NAME,values,"Id=?",new String[]{itemid});
+                    database.update(USER_ID,values,"Id=?",new String[]{itemid});
                     ((SuccessActivity) getContext()).pagerAdapter.notifyDataSetChanged();
 
                 }

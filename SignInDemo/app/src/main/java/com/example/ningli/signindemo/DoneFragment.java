@@ -19,14 +19,14 @@ public class DoneFragment extends Fragment {
 
     public static final String KEY_PAGE = "page";
 
-    private static String USER_NAME;
+    private static String USER_ID;
 
     @NonNull
     public static DoneFragment newInstance(int page, String NAME) {
         Bundle args = new Bundle();
         args.putInt(KEY_PAGE, page);
-        args.putString("USER_NAME", NAME);
-        USER_NAME = NAME;
+        args.putString("USER_ID", NAME);
+        USER_ID = NAME;
 
         DoneFragment doneFragment = new DoneFragment();
         doneFragment.setArguments(args);
@@ -52,7 +52,7 @@ public class DoneFragment extends Fragment {
         final SQLiteOpenHelper db = DBHelper.getInstance(getActivity());
         SQLiteDatabase database = db.getWritableDatabase();
 
-        Cursor cursor = database.query(USER_NAME, new String[]{"Id","item","num", "state"},"state = ?", new String[]{"1"}, null, null,null);
+        Cursor cursor = database.query(USER_ID, new String[]{"Id","item","num", "state"},"state = ?", new String[]{"1"}, null, null,null);
 
         while(cursor.moveToNext()){
             String itemname = cursor.getString(cursor.getColumnIndex("item"));

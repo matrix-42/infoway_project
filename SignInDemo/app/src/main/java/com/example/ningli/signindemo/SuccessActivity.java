@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import static com.example.ningli.signindemo.R.id.ViewPager;
 
 public class SuccessActivity extends AppCompatActivity {
-    private String USER_NAME;
+    private String USER_ID;
     public  PagerAdapter pagerAdapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class SuccessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_success);
 
         Intent intent = getIntent();
-        USER_NAME = intent.getStringExtra("UserName");
+        USER_ID = intent.getStringExtra("UserId");
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
@@ -43,11 +43,11 @@ public class SuccessActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0)
-                return AddFragment.newInstance(position, USER_NAME);
+                return AddFragment.newInstance(position, USER_ID);
             else if (position == 1)
-                return ShowFragment.newInstance(position, USER_NAME);
+                return ShowFragment.newInstance(position, USER_ID);
             else
-                return DoneFragment.newInstance(position, USER_NAME);
+                return DoneFragment.newInstance(position, USER_ID);
         }
 
         @Override
