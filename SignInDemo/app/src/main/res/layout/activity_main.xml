@@ -50,12 +50,12 @@
         android:layout_below="@+id/SignIn"
         android:layout_marginTop="64dp"/>
 
-    <com.facebook.login.widget.LoginButton
+    <!--<com.facebook.login.widget.LoginButton
         android:id="@+id/SignInFacebook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/SignInGoogle"
         android:layout_marginTop="16dp"/>
-
+-->
 
 </RelativeLayout>

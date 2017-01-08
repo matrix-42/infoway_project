@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "884061848228",
-    "project_id": "signindemo-1c633"
+    "project_number": "628861561653",
+    "project_id": "signindemo-bb6d8"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:884061848228:android:741748a871850ce4",
+        "mobilesdk_app_id": "1:628861561653:android:741748a871850ce4",
         "android_client_info": {
           "package_name": "com.example.ningli.signindemo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "884061848228-o8a4mhrk5ecdnr2fe8a0n26o4lcqpqfa.apps.googleusercontent.com",
+          "client_id": "628861561653-lgrvfqjq766snldbi7rg9bkla1vq0420.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.ningli.signindemo",
-            "certificate_hash": "2932B69B38CD3632A43463E1A158BA5AC3F9C9B0"
+            "certificate_hash": "CCDA052CC8B7B6BB3A919C1B38C37F35B0AD9817"
           }
         },
         {
-          "client_id": "884061848228-dim8k938v7ft4dlgvbfn310r9mhen643.apps.googleusercontent.com",
+          "client_id": "628861561653-erlhqjsduumvjsmm0pn8b043oh92modk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBi2v_9dvFemrbRbEsSqO_pcVojT5mm560"
+          "current_key": "AIzaSyAy__L2eIg3-zK1YDl7DOdZ9KwLWRf37zc"
         }
       ],
       "services": {
