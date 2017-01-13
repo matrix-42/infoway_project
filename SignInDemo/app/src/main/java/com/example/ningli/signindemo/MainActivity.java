@@ -21,6 +21,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import static com.example.ningli.signindemo.database.DBHelper.TABLE_NAME;
 
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String email = acc.getEmail();
             Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
 
+            signOut();
+
+
             Cursor cursor = database.query(TABLE_NAME, new String[]{"Id","UserName","Password"},
                     "UserName = ? and Type = ?", new String[]{email, "googlePlus"}, null, null,null);
             String id;
@@ -68,6 +73,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+    }
+    private void signOut() {
+        if (googleApiClient.isConnected()) {
+            Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            Log.d(MainActivity.class.getSimpleName(), "Revoke access using Google Api.");
+                        }
+                    });
+        } else {
+            Log.d(MainActivity.class.getSimpleName(), "Can not Revoke access using Google Api.");
+        }
     }
 
     @Override
