@@ -15,6 +15,7 @@ import static com.example.ningli.signindemo.R.id.ViewPager;
 public class SuccessActivity extends AppCompatActivity {
     private String USER_ID;
     public  PagerAdapter pagerAdapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +35,6 @@ public class SuccessActivity extends AppCompatActivity {
 
 
     }
-
     protected class PagerAdapter extends FragmentStatePagerAdapter {
         public PagerAdapter(FragmentManager fm) {
             super(fm);

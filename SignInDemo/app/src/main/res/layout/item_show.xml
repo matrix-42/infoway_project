@@ -4,6 +4,10 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/ShowItemimage"
+        android:layout_width="96dp"
+        android:layout_height="96dp" />
 
     <TextView
         android:padding="2dp"
@@ -11,6 +15,7 @@
         android:id="@+id/ShowItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1" />
     <TextView
         android:padding="2dp"
@@ -18,12 +23,14 @@
         android:id="@+id/ShowItemNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="0.5" />
     <Button
         android:padding="2dp"
         android:id="@+id/DoneButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:text="Done" />
 
 </LinearLayout>

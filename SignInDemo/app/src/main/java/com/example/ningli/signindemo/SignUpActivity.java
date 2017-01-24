@@ -60,7 +60,7 @@ public class SignUpActivity extends AppCompatActivity{
     }
     protected void createTable(String id) {
         String sql_creat =  "create table if not exists " + id +
-                " (Id integer primary key AUTOINCREMENT, item text, num integer, state integer)";
+                " (Id integer primary key AUTOINCREMENT, item text, num integer, state integer, image text)";
         database.execSQL(sql_creat);
         Toast.makeText(this, "Creating Table ... ", Toast.LENGTH_LONG).show();
     }

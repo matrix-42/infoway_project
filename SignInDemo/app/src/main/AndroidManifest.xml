@@ -3,7 +3,9 @@
     package="com.example.ningli.signindemo">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -29,6 +31,9 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0272f21c62c92130eefb7e3ef208956fcbd1d5a3" />
     </application>
 
 

@@ -11,10 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.ningli.signindemo.database.DBHelper;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,58 +29,77 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.example.ningli.signindemo.database.DBHelper.TABLE_NAME;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "Dw2H26JbXaZuFsexVE61Tblp2";
+    private static final String TWITTER_SECRET = "DdI3lsdd6E9B2w9kBMdbpddwssnKnj98HHAdPZ6A2mfVWDkULo";
+
     SQLiteDatabase database;
     private GoogleApiClient googleApiClient;
     private int RC_SIGN_IN = 007;
     private CallbackManager callbackManager;
+
+    private TwitterLoginButton twitterLoginButton;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleResult(result);
+            if (result.isSuccess()) {
+                GoogleSignInAccount acc = result.getSignInAccount();
+                String email = acc.getEmail();
+                signOutGoogle();
+                handleSignIn(email, "googlePlus");
+            }
+        }
+        else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            twitterLoginButton.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private void handleResult(GoogleSignInResult result) {
+    private void handleSignIn(String ID, String type) {
         Intent intent = new Intent(MainActivity.this, SuccessActivity.class);
-        if (result.isSuccess()) {
-            GoogleSignInAccount acc = result.getSignInAccount();
-            String email = acc.getEmail();
-            Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
-
-            signOut();
-
-
-            Cursor cursor = database.query(TABLE_NAME, new String[]{"Id","UserName","Password"},
-                    "UserName = ? and Type = ?", new String[]{email, "googlePlus"}, null, null,null);
-            String id;
-            if (!cursor.moveToNext()) {
-                ContentValues values = new ContentValues();
-                values.put("UserName", email);
-                values.put("Type", "googlePlus");
+        Cursor cursor = database.query(TABLE_NAME, new String[]{"Id","UserName","Password"},
+                "UserName = ? and Type = ?", new String[]{ID, type}, null, null,null);
+        String id;
+        if (!cursor.moveToNext()) {
+            ContentValues values = new ContentValues();
+            values.put("UserName", ID);
+            values.put("Type", type);
 
 
-                id = String.valueOf(database.insert(TABLE_NAME, null, values));
-                String sql_creat = "create table if not exists " + "_" + id +
-                        " (Id integer primary key AUTOINCREMENT, item text, num integer, state integer)";
-                database.execSQL(sql_creat);
-            }
-            else {
-                id = cursor.getString(cursor.getColumnIndex("Id"));
-            }
-                intent.putExtra("UserId", "_" + id);
-                startActivity(intent);
-
+            id = String.valueOf(database.insert(TABLE_NAME, null, values));
+            String sql_creat = "create table if not exists " + "_" + id +
+                    " (Id integer primary key AUTOINCREMENT, item text, num integer, state integer, image text)";
+            database.execSQL(sql_creat);
         }
+        else {
+            id = cursor.getString(cursor.getColumnIndex("Id"));
+        }
+            intent.putExtra("UserId", "_" + id);
+            startActivity(intent);
+
+
 
     }
-    private void signOut() {
+
+    private void signOutGoogle() {
         if (googleApiClient.isConnected()) {
             Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
@@ -91,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_main);
 
         SQLiteOpenHelper db = DBHelper.getInstance(this);
@@ -107,6 +137,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        LoginButton loginButton = (LoginButton)findViewById(R.id.SignInFacebook);
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                String facebookID = loginResult.getAccessToken().getUserId();
+                LoginManager.getInstance().logOut();
+                handleSignIn(facebookID, "facebook");
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+        twitterLoginButton = (TwitterLoginButton) findViewById(R.id.SignInTwitter);
+        twitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // The TwitterSession is also available through:
+                // Twitter.getInstance().core.getSessionManager().getActiveSession()
+                TwitterSession session = result.data;
+                // TODO: Remove toast and use the TwitterSession's userID
+                // with your app's user model
+                //String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
+                //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                String twitterID = String.valueOf(session.getUserId());
+                handleSignIn(twitterID, "twitter");
+            }
+            @Override
+            public void failure(TwitterException exception) {
+                Log.d("TwitterKit", "Login with Twitter failure", exception);
+            }
+        });
+
+
     }
 
     @Override

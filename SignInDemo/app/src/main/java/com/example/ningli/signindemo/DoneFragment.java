@@ -3,6 +3,7 @@ package com.example.ningli.signindemo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,16 +54,19 @@ public class DoneFragment extends Fragment {
         final SQLiteOpenHelper db = DBHelper.getInstance(getActivity());
         SQLiteDatabase database = db.getWritableDatabase();
 
-        Cursor cursor = database.query(USER_ID, new String[]{"Id","item","num", "state"},"state = ?", new String[]{"1"}, null, null,null);
+        Cursor cursor = database.query(USER_ID, new String[]{"Id","item","num", "state", "image"},"state = ?", new String[]{"1"}, null, null,null);
 
         while(cursor.moveToNext()){
             String itemname = cursor.getString(cursor.getColumnIndex("item"));
             String itemnum = cursor.getString(cursor.getColumnIndex("num"));
+            String itemimage = cursor.getString(cursor.getColumnIndex("image"));
 
 
             View itemview = ((SuccessActivity) getContext()).getLayoutInflater().inflate(R.layout.item_done, null);
             ((TextView) itemview.findViewById(R.id.ShowItemName)).setText(itemname);
             ((TextView) itemview.findViewById(R.id.ShowItemNum)).setText(itemnum);
+            ((ImageView) itemview.findViewById(R.id.ShowItemimage)).setImageURI(Uri.parse(itemimage));
+
             linearLayout.addView(itemview);
         }
     }
